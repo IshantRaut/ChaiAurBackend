@@ -9,6 +9,8 @@ import cors from "cors";
 // This is used to parse Cookie header and populate req.cookies with an object keyed by the cookie names.
 import cookieParser from "cookie-parser";
 
+//Routes Import
+import userRouter from "./routes/user.routes.js"
 // Create an instance of the Express application. This 'app' object will be used to configure the server.
 const app = express();
 
@@ -36,6 +38,11 @@ app.use(express.static("public"))
 
 // Use the 'cookie-parser' middleware to enable reading and writing cookies on the server.
 app.use(cookieParser())
+
+
+//ROustes Declaration
+app.use("/api/v1/user", userRouter)
+
 
 // Export the configured 'app' instance. This allows other files, like your main 'index.js',
 // to import and use this app to start the server.

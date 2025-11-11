@@ -6,6 +6,9 @@ import dotenv from "dotenv";
 // This function will handle the logic for connecting to your MongoDB database.
 import connectDB from "./db/index.js";
 
+
+import { app } from "./app.js";
+
 // Import the configured Express 'app' instance from app.js.
 // This is the core of your web server.
 import { app } from "./app.js";
@@ -24,7 +27,7 @@ connectDB()
     // Start the Express server and make it listen for incoming requests.
     app.listen(process.env.PORT || 8000, () => {
         // This callback function executes once the server is successfully running.
-        console.log(`⚙️   Server is running at port : ${process.env.PORT}`);
+       console.log(`⚙️ Server is running at port : ${process.env.PORT}`);
     })
 })
 .catch((err) => {
