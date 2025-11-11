@@ -16,7 +16,7 @@ import { app } from "./app.js";
 // Configure dotenv to load the environment variables.
 dotenv.config({
     // Specify the path to your environment file.
-    path: "./env"
+    path: "./.env"
 });
 
 // Call the function to connect to the database.
