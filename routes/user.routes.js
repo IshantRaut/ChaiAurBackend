@@ -1,7 +1,7 @@
 // Import the 'Router' class from the 'express' library to create a new router object.
 import { Router } from "express"; 
 // Import the 'registerUser' controller function, which will handle the logic for user registration.
-import { registerUser,loginUser,logoutUser } from "../controllers/user.controller.js"; 
+import { registerUser,loginUser,logoutUser,refreshAccessToken } from "../controllers/user.controller.js"; 
 // Import the 'upload' middleware from 'multer.middleware.js'. This is configured to handle multipart/form-data, which is primarily used for uploading files.
 import {upload} from "../middlewares/multer.middleware.js"; 
 
@@ -27,5 +27,6 @@ router.route("/register").post( // This route will respond to HTTP POST requests
 router.route("/login").post(loginUser)
 router.route("/logout").post(verifyJWT, logoutUser)
 
+router.route("/refresh-token").post(refreshAccessToken)
 // Export the router as the default export of this module, so it can be imported and used in the main application file (e.g., app.js or index.js).
 export default router; 

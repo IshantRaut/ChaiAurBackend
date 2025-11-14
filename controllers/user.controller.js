@@ -8,7 +8,8 @@ import {User} from "../models/user.model.js";
 import {uploadOnCloudinary} from "../middlewares/cloudinary.js";
 // Import the ApiResponse utility for creating standardized API success responses.
 import {ApiResponse} from "../utils/ApiResponse.js";
-
+//Import Json Web Token
+import jwt from "jsonwebtoken";
 // A helper function to generate new access and refresh tokens for a given user.
 const generateAccessAndRefereshTokens = async(userId) =>{
     try {
@@ -31,6 +32,49 @@ const generateAccessAndRefereshTokens = async(userId) =>{
            throw new ApiError(500, "Something went wrong while generating referesh and access token")
     }
 }
+
+const refreshAccessToken = asyncHandler(async(req,res)=>{
+    const  incomingRefreshToken= req.cookies.refreshToken || req.body.refreshToken;
+    if(!incomingRefreshToken){
+        throw new ApiError(401,"unauthorized request");
+    }
+
+    try {
+         const decodedToken = jwt.verify(
+            incomingRefreshToken,
+            process.env.REFRESH_TOKEN_SECRET
+        )
+    const user = await User.findById(decodedToken?._id)
+    if(!user){
+        throw new ApiError(401,"Invalid refresh Token")
+    }
+     if (incomingRefreshToken !== user?.refreshToken) {
+            throw new ApiError(401, "Refresh token is expired or used")
+            
+        }
+    
+        const options = {
+            httpOnly: true,
+            secure: true
+        }
+    
+        const {accessToken, newRefreshToken} = await generateAccessAndRefereshTokens(user._id)
+         return res
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", newRefreshToken, options)
+        .json(
+            new ApiResponse(
+                200, 
+                {accessToken, refreshToken: newRefreshToken},
+                "Access token refreshed"
+            )
+        )
+    } catch (error) {
+            throw new ApiError(401, error?.message || "Invalid refresh token")
+    }
+})
+
 
 // Controller function for handling user registration. Wrapped in asyncHandler for error handling.
 const registerUser = asyncHandler( async (req, res) => {
@@ -179,5 +223,6 @@ const logoutUser = asyncHandler(async(req, res) => {
 export {
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    refreshAccessToken
 }
