@@ -1,7 +1,18 @@
 // Import the 'Router' class from the 'express' library to create a new router object.
 import { Router } from "express"; 
 // Import the 'registerUser' controller function, which will handle the logic for user registration.
-import { registerUser,loginUser,logoutUser,refreshAccessToken } from "../controllers/user.controller.js"; 
+import { 
+    loginUser, 
+    logoutUser, 
+    registerUser, 
+    refreshAccessToken, 
+    changeCurrentPassword, 
+    getCurrentUser, 
+    updateUserAvatar, 
+    updateUserCoverImage, 
+    getUserChannelProfile, 
+    getWatchHistory,
+updateAccountDetails  } from "../controllers/user.controller.js"; 
 // Import the 'upload' middleware from 'multer.middleware.js'. This is configured to handle multipart/form-data, which is primarily used for uploading files.
 import {upload} from "../middlewares/multer.middleware.js"; 
 
@@ -28,5 +39,13 @@ router.route("/login").post(loginUser)
 router.route("/logout").post(verifyJWT, logoutUser)
 
 router.route("/refresh-token").post(refreshAccessToken)
+router.route("/change-password").post(verifyJWT, changeCurrentPassword)
+router.route("/current-user").get(verifyJWT, getCurrentUser)
+router.route("/update-account").patch(verifyJWT, updateAccountDetails)
+
+router.route("/avatar").patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
+router.route("/cover-image").patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage)
+router.route("/c/:username").get(verifyJWT, getUserChannelProfile)
+router.route("/history").get(verifyJWT, getWatchHistory)
 // Export the router as the default export of this module, so it can be imported and used in the main application file (e.g., app.js or index.js).
 export default router; 

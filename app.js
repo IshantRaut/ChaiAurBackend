@@ -11,6 +11,15 @@ import cookieParser from "cookie-parser";
 
 //Routes Import
 import userRouter from "./routes/user.routes.js"
+
+import healthcheckRouter from "./routes/healthcheck.routes.js"
+import tweetRouter from "./routes/tweet.routes.js"
+import subscriptionRouter from "./routes/subscription.routes.js"
+import videoRouter from "./routes/video.routes.js"
+import commentRouter from "./routes/comment.routes.js"
+import likeRouter from "./routes/like.routes.js"
+import playlistRouter from "./routes/playlist.routes.js"
+import dashboardRouter from "./routes/dashboard.routes.js"
 // Create an instance of the Express application. This 'app' object will be used to configure the server.
 const app = express();
 
@@ -41,8 +50,15 @@ app.use(cookieParser())
 
 
 //ROustes Declaration
+app.use("/api/v1/healthcheck", healthcheckRouter)
 app.use("/api/v1/user", userRouter)
-
+app.use("/api/v1/tweets", tweetRouter)
+app.use("/api/v1/subscriptions", subscriptionRouter)
+app.use("/api/v1/videos", videoRouter)
+app.use("/api/v1/comments", commentRouter)
+app.use("/api/v1/likes", likeRouter)
+app.use("/api/v1/playlist", playlistRouter)
+app.use("/api/v1/dashboard", dashboardRouter)
 
 // Export the configured 'app' instance. This allows other files, like your main 'index.js',
 // to import and use this app to start the server.
